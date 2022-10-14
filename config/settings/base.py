@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     # rest_framework
     'rest_framework',
     # local apps
-    'apps.account.apps.AccountConfig',
+    'common.account.apps.AccountConfig',
 ]
 
 MIDDLEWARE = [
@@ -104,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'apps.account.validator.PasswordRuleValidator',
+        'NAME': 'common.account.validator.PasswordRuleValidator',
     },
 ]
 
