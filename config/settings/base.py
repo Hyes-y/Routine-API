@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     # local apps
     'common.account.apps.AccountConfig',
+    'apps.routine.apps.RoutineConfig',
 ]
 
 MIDDLEWARE = [
