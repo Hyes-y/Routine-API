@@ -2,18 +2,11 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 
-class TimeStampModel(models.Model):
-    created_at = models.DateTimeField(
-        verbose_name='생성 날짜',
-        auto_now_add=True,
-    )
-    modified_at = models.DateTimeField(
-        verbose_name='수정 날짜',
-        auto_now=True,
-    )
+# class TimeStampModel(models.Model):
 
 
-class Routine(TimeStampModel):
+
+class Routine(models.Model):
     USER = get_user_model()
     CATEGORY = (
         ('MIRACLE', 'MIRACLE'),
@@ -47,9 +40,17 @@ class Routine(TimeStampModel):
         verbose_name='삭제 여부',
         default=False,
     )
+    created_at = models.DateTimeField(
+        verbose_name='생성 날짜',
+        auto_now_add=True,
+    )
+    modified_at = models.DateTimeField(
+        verbose_name='수정 날짜',
+        auto_now=True,
+    )
 
 
-class RoutineResult(TimeStampModel):
+class RoutineResult(models.Model):
     RESULT = (
         ('NOT', '안함'),
         ('TRY', '시도'),
@@ -71,9 +72,17 @@ class RoutineResult(TimeStampModel):
         verbose_name='삭제 여부',
         default=False,
     )
+    created_at = models.DateTimeField(
+        verbose_name='생성 날짜',
+        auto_now_add=True,
+    )
+    modified_at = models.DateTimeField(
+        verbose_name='수정 날짜',
+        auto_now=True,
+    )
 
 
-class RoutineDay(TimeStampModel):
+class RoutineDay(models.Model):
     DAYS = (
         ('MON', '월요일'),
         ('TUE', '화요일'),
@@ -95,4 +104,11 @@ class RoutineDay(TimeStampModel):
         max_length=10,
         choices=DAYS,
     )
-
+    created_at = models.DateTimeField(
+        verbose_name='생성 날짜',
+        auto_now_add=True,
+    )
+    modified_at = models.DateTimeField(
+        verbose_name='수정 날짜',
+        auto_now=True,
+    )

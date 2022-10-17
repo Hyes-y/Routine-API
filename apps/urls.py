@@ -1,5 +1,5 @@
 from django.urls import path, include
 
 urlpatterns = [
-    path('routines/', include('routine.urls')),
+    path('routines/', include('apps.routine.urls')),
 ]
