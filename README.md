@@ -4,15 +4,44 @@
 해당 수행 여부에 대한 내용을 기록하여 관리할 수 있도록 도와주는 Routine-API
 
 ## 목차
-1. [프로젝트 개요](#프로젝트-개요)
-2. [개발 기간](#개발-기간)
-3. [프로젝트 기술 스택](#프로젝트-기술-스택)
-4. [요구사항 분석](#요구사항-분석)
-5. [ERD](#erd)
-6. [API 명세](#api-명세)
-7. [프로젝트 구조](#프로젝트-구조)
-8. [프로젝트 시작 방법](#프로젝트-시작-방법)
+1. [프로젝트 시작 방법](#프로젝트-시작-방법)
+2. [프로젝트 개요](#프로젝트-개요)
+3. [개발 기간](#개발-기간)
+4. [프로젝트 기술 스택](#프로젝트-기술-스택)
+5. [요구사항 분석](#요구사항-분석)
+6. [ERD](#erd)
+7. [API 명세](#api-명세)
+8. [프로젝트 구조](#프로젝트-구조)
 
+
+
+<br>
+
+## 프로젝트 시작 방법
+- 외부 라이브러리(APScheduler, simple-jwt)를 사용하였으므로 requirements.txt를 꼭 다운로드 해주셔야 합니다.
+- 테스트용 DB 및 SECRET_KEY 사용을 위해 `python manage.py` command 사용시 `--settings=config.settings.test` 옵션을 사용해주셔야 합니다.
+
+1. 로컬에서 실행할 경우 (테스트용)
+```bash
+# 프로젝트 clone(로컬로 내려받기)
+git clone -b develop --single-branch ${github 주소}
+cd ${디렉터리 명}
+
+# 가상환경 설정
+python -m venv ${가상환경명}
+source ${가상환경명}/bin/activate
+# window (2 ways) 
+# 1> ${가상환경명}/Scripts/activate
+# 2> activate
+
+# 라이브러리 설치
+pip install -r requirements.txt
+# DB 생성
+python manage.py makemigrations --settings=config.settings.test
+python manage.py migrate --settings=config.settings.test
+# 실행
+python manage.py runserver --settings=config.settings.test
+```
 
 <br>
 
@@ -432,29 +461,6 @@ Django Rest Framework 를 이용한 REST API 서버로
 
 <br>
 
-## 프로젝트 시작 방법
-### 외부 라이브러리(APScheduler, simple-jwt)를 사용하였으므로 requirements.txt를 꼭 다운로드 해주셔야 합니다.
-
-1. 로컬에서 실행할 경우
-```bash
-# 프로젝트 clone(로컬로 내려받기)
-git clone -b develop --single-branch ${github 주소}
-cd ${디렉터리 명}
-
-# 가상환경 설정
-python -m venv ${가상환경명}
-source ${가상환경명}/bin/activate
-# window (2 ways) 
-# 1> ${가상환경명}/Scripts/activate
-# 2> activate
-
-# 라이브러리 설치
-pip install -r requirements.txt
-# 실행
-python manage.py runserver
-```
-
-<br>
 
 ## Commit Convention
 
