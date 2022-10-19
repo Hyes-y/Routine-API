@@ -35,16 +35,20 @@ class RoutineCreateUpdateDeleteSerializer(ModelSerializer):
         if days:
             # 기존에 있던 routine 요일 데이터 삭제
             RoutineDay.objects.filter(routine_id=instance).delete()
-
+            flag = True
             # 변경한 routine 요일 데이터 생성
             for day in days:
                 RoutineDay.objects.create(routine_id=instance, day=day)
                 # 변경한 routine 요일과 변경 날짜가 일치하는 경우
                 if day == RoutineDay.DAYS[datetime.now().weekday()][0]:
+                    flag = False
                     # 요일 데이터를 전체 삭제 후 다시 생성하므로 기존에 이미 result data가 있었는지 확인 후 없으면 생성
                     res = RoutineResult.objects.filter(routine_id=instance, created_at__date=datetime.now().date())
                     if len(res) == 0:
                         RoutineResult.objects.create(routine_id=instance)
+            # 현재 요일과 일치하는 요일(변경)이 없는 경우 기존에 있던 걸 지움
+            if flag:
+                RoutineResult.objects.filter(routine_id=instance, created_at__date=datetime.now().date()).delete()
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)

@@ -1,6 +1,5 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import get_user_model
-from django.conf import settings
 
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient

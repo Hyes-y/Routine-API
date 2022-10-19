@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     # local apps
     'common.account.apps.AccountConfig',
     'apps.routine.apps.RoutineConfig',
+    # jobs
+    'jobs.apps.JobsConfig',
 ]
 
 MIDDLEWARE = [
