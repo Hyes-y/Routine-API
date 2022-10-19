@@ -430,6 +430,8 @@ Django Rest Framework 를 이용한 REST API 서버로
 <br>
 
 ## 프로젝트 시작 방법
+### 외부 라이브러리(APScheduler, simple-jwt)를 사용하였으므로 requirements.txt를 꼭 다운로드 해주셔야 합니다.
+
 1. 로컬에서 실행할 경우
 ```bash
 # 프로젝트 clone(로컬로 내려받기)
