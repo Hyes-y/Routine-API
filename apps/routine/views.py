@@ -1,17 +1,23 @@
-from rest_framework import generics, viewsets
+from rest_framework import viewsets
 from rest_framework.exceptions import ParseError
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import status
-from .serializers import RoutineCreateUpdateDeleteSerializer, RoutineListSerializer, RoutineRetrieveSerializer
+from rest_framework.permissions import IsAuthenticated
+from .serializers import (
+    RoutineCreateUpdateDeleteSerializer,
+    RoutineListSerializer,
+    RoutineRetrieveSerializer,
+    RoutineResultSerializer
+)
 from .models import Routine, RoutineResult
 from django.db.models import F
 from datetime import datetime
 
 
 class RoutineViewSet(viewsets.ModelViewSet):
-    """ 게시글 CRUD API """
+    """ Routine CRRUD API """
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         """ queryset 반환 함수 """
@@ -20,13 +26,15 @@ class RoutineViewSet(viewsets.ModelViewSet):
                 account_id=self.request.user,
                 is_deleted=False
             )
-        elif self.action == 'retrieve':
-            queryset = Routine.objects.prefetch_related('routine_results').filter(
+        elif self.action in 'retrieve':
+            queryset = Routine.objects.filter(
                 account_id=self.request.user,
                 is_deleted=False,
+                routine_results__created_at__date=datetime.now().date(),
             ).annotate(result=F('routine_results__result'))
 
         else:
+            # list 요청시 날짜(현재 날짜 이전)에 해당하는 루틴만 조회 가능
             params = self.request.query_params
             today = datetime.now().strftime('%Y-%m-%d')
             date = params.get('date', today)
@@ -119,3 +127,38 @@ class RoutineViewSet(viewsets.ModelViewSet):
         """
         instance.is_deleted = True
         instance.save()
+
+    @action(detail=True, methods=['put'])
+    def check(self, request, *args, **kwargs):
+        instance = self.get_object()
+        routine_result = RoutineResult.objects.filter(
+            routine_id=instance,
+            created_at__date=datetime.now().date(),
+        )[0]
+
+        value = request.data.get('result', 'NOT')
+        routine_result.result = value
+        routine_result.save()
+
+        data = {
+            "data": {
+                "routine_id": instance.id
+            },
+            "message": {
+                "msg": "The routine result has been modified.",
+                "status": "ROUTINE_RESULT_UPDATE_OK"
+            }
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
+
+
+class RoutineResultView(viewsets.ModelViewSet):
+    serializer_class = RoutineResultSerializer
+
+    def get_queryset(self):
+        queryset = RoutineResult.objects.filter(
+            routine_id__account_id=self.request.user,
+        )
+
+        return queryset
+

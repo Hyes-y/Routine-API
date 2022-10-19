@@ -2,10 +2,6 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 
-# class TimeStampModel(models.Model):
-
-
-
 class Routine(models.Model):
     USER = get_user_model()
     CATEGORY = (
@@ -67,6 +63,7 @@ class RoutineResult(models.Model):
         verbose_name='수행 결과',
         max_length=10,
         choices=RESULT,
+        default=RESULT[0][0],
     )
     is_deleted = models.BooleanField(
         verbose_name='삭제 여부',
