@@ -106,3 +106,10 @@ class RoutineAPITest(APITestCase):
         response = self.client.put(request_url, data=data, format='json')
         print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_routine_result_lookup_success(self):
+        """ routine 결과 기록 조회 성공 테스트 """
+        request_url = f"{self.url}{self.routine.id}/result/"
+        response = self.client.get(request_url)
+        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

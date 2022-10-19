@@ -44,7 +44,7 @@ class RoutineViewSet(viewsets.ModelViewSet):
 
             queryset = Routine.objects.prefetch_related('routine_results').filter(
                 account_id=self.request.user,
-                is_deleted=False,
+                # is_deleted=False,
                 routine_results__created_at__date=date,
             ).annotate(result=F('routine_results__result'))
 
@@ -128,28 +128,64 @@ class RoutineViewSet(viewsets.ModelViewSet):
         instance.is_deleted = True
         instance.save()
 
+    @action(detail=True, methods=['get'])
+    def result(self, request, *args, **kwargs):
+        try:
+            response = super(RoutineViewSet, self).retrieve(request, *args, **kwargs)
+            instance = self.get_object()
+            routine_result = RoutineResult.objects.filter(
+                routine_id=instance,
+                created_at__date=datetime.now().date(),
+            )[0]
+            response.data['result'] = routine_result.result
+            data = {
+                "data": response.data,
+                "message": {
+                    "msg": "The routine result lookup was successful.",
+                    "status": "ROUTINE_RESULT_LOOKUP_OK"
+                }
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
+        except Exception as e:
+            data = {
+                "message": {
+                    "msg": "You can only lookup what you have to do today.",
+                    "status": "ROUTINE_RESULT_LOOKUP_FAIL"
+                }
+            }
+            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+
     @action(detail=True, methods=['put'])
     def check(self, request, *args, **kwargs):
-        instance = self.get_object()
-        routine_result = RoutineResult.objects.filter(
-            routine_id=instance,
-            created_at__date=datetime.now().date(),
-        )[0]
+        try:
+            instance = self.get_object()
+            routine_result = RoutineResult.objects.filter(
+                routine_id=instance,
+                created_at__date=datetime.now().date(),
+            )[0]
 
-        value = request.data.get('result', 'NOT')
-        routine_result.result = value
-        routine_result.save()
+            value = request.data.get('result', 'NOT')
+            routine_result.result = value
+            routine_result.save()
 
-        data = {
-            "data": {
-                "routine_id": instance.id
-            },
-            "message": {
-                "msg": "The routine result has been modified.",
-                "status": "ROUTINE_RESULT_UPDATE_OK"
+            data = {
+                "data": {
+                    "routine_id": instance.id
+                },
+                "message": {
+                    "msg": "The routine result has been modified.",
+                    "status": "ROUTINE_RESULT_UPDATE_OK"
+                }
             }
-        }
-        return Response(data=data, status=status.HTTP_200_OK)
+            return Response(data=data, status=status.HTTP_200_OK)
+        except Exception as e:
+            data = {
+                "message": {
+                    "msg": "You can only check what you have to do today.",
+                    "status": "ROUTINE_RESULT_UPDATE_FAIL"
+                }
+            }
+            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RoutineResultView(viewsets.ModelViewSet):
