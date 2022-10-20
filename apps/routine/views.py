@@ -1,3 +1,4 @@
+from django.db.models import F
 from rest_framework import viewsets
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
@@ -11,7 +12,6 @@ from .serializers import (
     RoutineResultSerializer
 )
 from .models import Routine, RoutineResult
-from django.db.models import F
 from datetime import datetime
 
 
@@ -130,6 +130,7 @@ class RoutineViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def result(self, request, *args, **kwargs):
+        """ routine 수행 여부 기록 action : 현재 날짜에 해당하는 routine 수행 여부만 기록 가능 """
         try:
             response = super(RoutineViewSet, self).retrieve(request, *args, **kwargs)
             instance = self.get_object()
@@ -157,6 +158,7 @@ class RoutineViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['put'])
     def check(self, request, *args, **kwargs):
+        """ routine 수행 여부 조회 action : 현재 날짜에 해당하는 routine 수행 여부만 조회 가능 """
         try:
             instance = self.get_object()
             routine_result = RoutineResult.objects.filter(
@@ -188,7 +190,8 @@ class RoutineViewSet(viewsets.ModelViewSet):
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RoutineResultView(viewsets.ModelViewSet):
+class RoutineResultViewSet(viewsets.ModelViewSet):
+    """ Routine 수행 여부 관련 CRUD API (현재는 사용 x) """
     serializer_class = RoutineResultSerializer
 
     def get_queryset(self):
