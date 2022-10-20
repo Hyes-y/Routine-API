@@ -4,6 +4,7 @@ from datetime import datetime
 
 
 class RoutineCreateUpdateDeleteSerializer(ModelSerializer):
+    """ Routine 생성, 수정, 삭제 시리얼라이저 """
     days = ListField(write_only=True, min_length=1, max_length=7)
 
     class Meta:
@@ -58,6 +59,7 @@ class RoutineCreateUpdateDeleteSerializer(ModelSerializer):
 
 
 class RoutineListSerializer(ModelSerializer):
+    """ Routine 목록 조회 시리얼라이저 """
     result = CharField(max_length=10)
 
     class Meta:
@@ -66,6 +68,7 @@ class RoutineListSerializer(ModelSerializer):
 
 
 class RoutineRetrieveSerializer(ModelSerializer):
+    """ Routine 단건 조회 시리얼라이저 """
     days = SerializerMethodField()
 
     class Meta:
@@ -79,7 +82,10 @@ class RoutineRetrieveSerializer(ModelSerializer):
         return days
 
 
+# Routine Result의 id를 사용하는 시리얼라이저
+# 사용 x
 class RoutineResultSerializer(ModelSerializer):
+    """ Routine Result CRUD 시리얼라이저 (사용 X) """
     class Meta:
         model = RoutineResult
         fields = '__all__'

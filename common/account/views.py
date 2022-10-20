@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
-from .serializers import SignUpSerializer
 from rest_framework import generics
+from .serializers import SignUpSerializer
 
 
 class SignUpView(generics.CreateAPIView):

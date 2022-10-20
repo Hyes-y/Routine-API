@@ -1,10 +1,8 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import get_user_model
-
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
-
 from apps.routine.models import Routine, RoutineDay, RoutineResult
 
 
@@ -46,7 +44,7 @@ class RoutineAPITest(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.refresh.access_token}')
 
     def test_routine_create_success(self):
-        """ 프로젝트 생성 성공 테스트 """
+        """ routine 생성 성공 테스트 """
 
         data = {
             "title": "problem solving",

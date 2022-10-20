@@ -4,6 +4,7 @@ from datetime import datetime
 
 
 class RoutineResultSchedule:
+    """ 매일 해당하는 요일의 Routine 결과 생성 스케쥴러 """
     def __init__(self):
         self.Routine = Routine
         self.RoutineResult = RoutineResult

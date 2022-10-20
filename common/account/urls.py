@@ -1,5 +1,5 @@
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenVerifyView, TokenRefreshView
 from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenVerifyView, TokenRefreshView
 from .views import SignUpView
 
 urlpatterns = [
